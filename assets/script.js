@@ -124,6 +124,14 @@ document.addEventListener("DOMContentLoaded", () => {
   initVerifyTabs();
   initGlobalAuth();
   initHeroLogoTilt();
+  initSocialFeedStore();
+
+  // Check redirection state from post.html back to social feed
+  const redirectTab = localStorage.getItem('redirectTab');
+  if (redirectTab) {
+    localStorage.removeItem('redirectTab');
+    switchView(redirectTab);
+  }
   
   // Default load listings table on Admin page
   renderAdminListings();
@@ -196,6 +204,8 @@ function switchView(viewName) {
   // Handle specialized views
   if (viewName === 'guest') {
     initLeafletMap();
+  } else if (viewName === 'social') {
+    renderSocialFeed();
   }
   
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -369,13 +379,13 @@ function selectListing(id) {
   if (property.unverifiedAmenities && property.unverifiedAmenities.length > 0) {
     verificationWarning = `
       <div class="flag-row" style="background:#FBE3E1; border-color:#C1121F; color:#780000; margin-bottom:14px;">
-        ⚠️ <strong>AI Audit Warning:</strong> Amenities [${property.unverifiedAmenities.join(', ')}] could not be verified by CLIP vision models.
+        <strong>AI Audit Warning:</strong> Amenities [${property.unverifiedAmenities.join(', ')}] could not be verified by CLIP vision models.
       </div>
     `;
   } else {
     verificationWarning = `
       <div class="ai-verified-pill" style="align-self:stretch; justify-content:center; margin-bottom:14px; background:rgba(47,158,85,0.1); color:#2F9E55; border-color:rgba(47,158,85,0.3)">
-        ✓ AI Truth-Audited (GPS Coordinates &amp; Amenities Verified)
+        AI Truth-Audited — GPS Coordinates &amp; Amenities Verified
       </div>
     `;
   }
@@ -662,7 +672,7 @@ function simulateHostUpload(auditType) {
           document.getElementById('clip-score-val').innerText = '0.92';
           document.getElementById('audit-db-status').innerHTML = `
             <div style="background:rgba(47,158,85,0.1); color:#2F9E55; padding:8px 12px; border-radius:8px; font-size:12.5px; font-weight:700;">
-              ✓ Listing Verified: Photo GPS coordinates and claimed Workspace verified.
+              Listing Verified: Photo GPS coordinates and claimed Workspace verified.
             </div>
           `;
           
@@ -691,7 +701,7 @@ function simulateHostUpload(auditType) {
           document.getElementById('clip-score-val').innerText = '0.64';
           document.getElementById('audit-db-status').innerHTML = `
             <div style="background:rgba(224,86,91,0.1); color:var(--accent-dark); padding:8px 12px; border-radius:8px; font-size:12.5px; font-weight:700;">
-              ⚠️ DB Flagged: Workspace amenity claimed by host could not be verified in photo.
+              Flagged: Workspace amenity claimed by host could not be verified in photo.
             </div>
           `;
           
@@ -719,7 +729,7 @@ function simulateHostUpload(auditType) {
           document.getElementById('clip-score-val').innerText = '0.35';
           document.getElementById('audit-db-status').innerHTML = `
             <div style="background:rgba(224,86,91,0.1); color:var(--accent-dark); padding:8px 12px; border-radius:8px; font-size:12.5px; font-weight:700;">
-              ⚠️ DB Flagged: Recycled stock image or metadata spoofing detected. GPS Coordinates mismatch.
+              Flagged: Recycled stock image or metadata spoofing detected. GPS coordinates mismatch.
             </div>
           `;
           
@@ -748,16 +758,16 @@ function renderAdminListings() {
   Object.keys(LISTINGS_DB).forEach(key => {
     const property = LISTINGS_DB[key];
     
-    let statusText = `<span style="color:#2F9E55; font-weight:700;">✓ Verified</span>`;
+    let statusText = `<span style="color:#2F9E55; font-weight:700;">Verified</span>`;
     if (property.unverifiedAmenities && property.unverifiedAmenities.length > 0) {
-      statusText = `<span style="color:var(--accent); font-weight:700;">⚠️ Flagged</span>`;
+      statusText = `<span style="color:var(--accent); font-weight:700;">Flagged</span>`;
     }
 
     let summaryText = '';
     if (property.groundTruthSummary.wifiSpeedMbps) {
       summaryText = `
         <div style="font-size:11px; line-height:1.3; color:rgba(27,18,8,0.75);">
-          📶 ${property.groundTruthSummary.wifiSpeedMbps} Mbps | 🔊 ${property.groundTruthSummary.noiseLevelDb} dB | 🚶 Walk: ${property.groundTruthSummary.walkability}
+          Wi-Fi: ${property.groundTruthSummary.wifiSpeedMbps} Mbps &middot; Noise: ${property.groundTruthSummary.noiseLevelDb} dB &middot; Walk Score: ${property.groundTruthSummary.walkability}
         </div>
       `;
     } else {
@@ -794,7 +804,7 @@ function triggerGeminiSynthesis(id) {
       <h4 style="font-family:'Fraunces',serif; margin:0;">Synthesized ground_truth_summary Object</h4>
       <pre id="synthesis-json" style="background:#f1f3f5; padding:12px; border-radius:8px; font-size:11.5px; color:#37474f; overflow-x:auto; margin:0; border:1px solid var(--line);"></pre>
       <div style="background:rgba(47,158,85,0.1); color:#2F9E55; padding:8px 12px; border-radius:8px; font-size:12.5px; font-weight:700; margin-top:4px;">
-        ✓ JSON Written to listings database row!
+        JSON written to listings database row.
       </div>
     </div>
   `;
@@ -1037,4 +1047,254 @@ function appendChatBubbleStreaming(text, sender) {
     }
   }
   typeChar();
+}
+
+// ===== TRAVEL FEED & SOCIAL FACILITY (MOCK DATABASE & LOGIC) =====
+const MOCK_SOCIAL_POSTS = [
+  {
+    id: "post-1",
+    title: "Unbelievable remote work stay in Lisbon!",
+    author: "Alex Rivera",
+    avatar: "A",
+    location: "Lisbon, Portugal",
+    content: "Just finished a 2-week workation at the Downtown Designer Loft. The 185 Mbps Wi-Fi was flawless. I sat out on the terrace every afternoon. Highly recommend the Madalena Cafe just down the street! Walking accessibility in Lisbon is amazing, though the street tram is slightly noisy if you open the front balcony.",
+    image: "https://images.unsplash.com/photo-1505873242700-f289a29e1e0f?auto=format&fit=crop&w=700&q=80",
+    likes: 24,
+    comments: [
+      {
+        author: "Clara Dupont",
+        avatar: "C",
+        content: "So glad you enjoyed the terrace! We just had the double-glazed windows serviced to keep the tram noise even lower.",
+        date: "2026-06-25"
+      },
+      {
+        author: "Marc Wood",
+        avatar: "M",
+        content: "Adding this to my wishlist for next spring. Is the desk comfortable for 8+ hours?",
+        date: "2026-06-26"
+      }
+    ],
+    date: "2026-06-24"
+  },
+  {
+    id: "post-2",
+    title: "A serene alpine escape in Interlaken",
+    author: "Sophia Martinez",
+    avatar: "S",
+    location: "Interlaken, Switzerland",
+    content: "Waking up to the Swiss Alps view was majestic. It is incredibly quiet here—literally only bird sounds. The walk to the Harder Kulm funicular is beautiful and highly recommended for hikers.",
+    image: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=700&q=80",
+    likes: 18,
+    comments: [
+      {
+        author: "Hans Keller",
+        avatar: "H",
+        content: "Glad you liked the quiet! The hiking path next to the door is my personal favorite.",
+        date: "2026-06-25"
+      }
+    ],
+    date: "2026-06-23"
+  }
+];
+
+let activeSocialTag = 'all';
+
+function initSocialFeedStore() {
+  if (!localStorage.getItem('innsight_posts')) {
+    localStorage.setItem('innsight_posts', JSON.stringify(MOCK_SOCIAL_POSTS));
+  }
+  renderSocialFeed();
+  renderLandingPosts();
+}
+
+function getPostsFromStore() {
+  return JSON.parse(localStorage.getItem('innsight_posts')) || MOCK_SOCIAL_POSTS;
+}
+
+function savePostsToStore(posts) {
+  localStorage.setItem('innsight_posts', JSON.stringify(posts));
+}
+
+// Render feed list cards
+function renderSocialFeed() {
+  const grid = document.getElementById('social-feed-grid');
+  if (!grid) return;
+
+  const posts = getPostsFromStore();
+  grid.innerHTML = '';
+
+  const searchVal = (document.getElementById('social-search-input')?.value || '').toLowerCase();
+
+  posts.forEach(post => {
+    // Check text search filter
+    const matchesSearch = 
+      post.title.toLowerCase().includes(searchVal) || 
+      post.content.toLowerCase().includes(searchVal) || 
+      post.location.toLowerCase().includes(searchVal) || 
+      post.author.toLowerCase().includes(searchVal);
+
+    // Check category tag filter
+    let matchesTag = true;
+    if (activeSocialTag !== 'all') {
+      matchesTag = post.location.toLowerCase().includes(activeSocialTag.toLowerCase());
+    }
+
+    if (matchesSearch && matchesTag) {
+      const card = document.createElement('div');
+      card.className = 'social-card reveal in';
+      card.onclick = () => openPostDetail(post.id);
+
+      const imageHtml = post.image 
+        ? `<div class="img-wrap"><img src="${post.image}" alt="${post.title}"></div>` 
+        : '<div class="img-wrap" style="height:160px; background:#EDEFF2; display:flex; align-items:center; justify-content:center; color:#8da4c4; font-size:12px;">No Photo</div>';
+
+      card.innerHTML = `
+        ${imageHtml}
+        <div class="card-content">
+          <div class="card-meta">
+            <span class="avatar">${post.avatar || post.author.charAt(0)}</span>
+            <span class="author">${post.author}</span>
+            <span class="date">${post.date}</span>
+          </div>
+          <h4>${post.title}</h4>
+          <p>${post.content}</p>
+          <div class="card-footer">
+            <span>${post.location}</span>
+            <span>${post.comments.length} comments</span>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    }
+  });
+}
+
+function filterSocialFeed() {
+  renderSocialFeed();
+}
+
+function filterSocialTag(tag) {
+  activeSocialTag = tag;
+  document.querySelectorAll('#view-social .btn-ghost').forEach(btn => {
+    btn.classList.remove('active-filter');
+  });
+
+  const btnId = `filter-${tag === 'all' ? 'all' : tag.toLowerCase()}`;
+  document.getElementById(btnId)?.classList.add('active-filter');
+
+  renderSocialFeed();
+}
+
+// Open/Close Create Post Modal
+function openCreatePostModal() {
+  const modal = document.getElementById('createPostModal');
+  if (modal) {
+    // Autofill author name if signed in
+    if (activeUser) {
+      document.getElementById('post-author-input').value = activeUser.name;
+    } else {
+      document.getElementById('post-author-input').value = 'Alex Rivera';
+    }
+    modal.classList.add('open');
+  }
+}
+
+function closeCreatePostModal() {
+  document.getElementById('createPostModal')?.classList.remove('open');
+}
+
+function handlePostPropertySelectChange() {
+  const select = document.getElementById('post-property-select');
+  const locationContainer = document.getElementById('post-location-container');
+  if (select.value === 'other') {
+    locationContainer.style.display = 'flex';
+    document.getElementById('post-location-input').required = true;
+  } else {
+    locationContainer.style.display = 'none';
+    document.getElementById('post-location-input').required = false;
+  }
+}
+
+// Handle Form Submission
+function handleCreatePost(event) {
+  event.preventDefault();
+  
+  const title = document.getElementById('post-title-input').value.trim();
+  const propertyKey = document.getElementById('post-property-select').value;
+  const author = document.getElementById('post-author-input').value.trim();
+  const content = document.getElementById('post-content-input').value.trim();
+  const image = document.getElementById('post-image-input').value.trim();
+  
+  let location = '';
+  if (propertyKey === 'other') {
+    location = document.getElementById('post-location-input').value.trim();
+  } else {
+    const propDetails = LISTINGS_DB[propertyKey];
+    location = propDetails ? propDetails.address.split(',')[1].trim() + ", " + propDetails.address.split(',')[2].trim() : 'Unknown';
+  }
+
+  const posts = getPostsFromStore();
+  const newPost = {
+    id: "post-" + Date.now(),
+    title: title,
+    author: author,
+    avatar: author.charAt(0).toUpperCase(),
+    location: location,
+    content: content,
+    image: image || null,
+    likes: 0,
+    comments: [],
+    date: new Date().toISOString().split('T')[0]
+  };
+
+  posts.unshift(newPost);
+  savePostsToStore(posts);
+
+  // Clear inputs and close
+  document.getElementById('create-post-form').reset();
+  closeCreatePostModal();
+  
+  // Re-render feed and landing page preview
+  renderSocialFeed();
+  renderLandingPosts();
+}
+
+// Render dynamic 3 recent posts on the main landing page, linking directly to post.html
+function renderLandingPosts() {
+  const container = document.getElementById('landing-posts-grid');
+  if (!container) return;
+
+  const posts = getPostsFromStore();
+  container.innerHTML = '';
+
+  // Capture the 3 most recent posts
+  const previewPosts = posts.slice(0, 3);
+
+  previewPosts.forEach(post => {
+    const card = document.createElement('div');
+    card.className = 'social-card reveal in';
+    card.onclick = () => openPostDetail(post.id);
+
+    const imageHtml = post.image 
+      ? `<div class="img-wrap"><img src="${post.image}" alt="${post.title}"></div>` 
+      : '<div class="img-wrap" style="height:160px; background:#EDEFF2; display:flex; align-items:center; justify-content:center; color:#8da4c4; font-size:12px;">No Photo</div>';
+
+    card.innerHTML = `
+      ${imageHtml}
+      <div class="card-content">
+        <div class="card-meta">
+          <span class="avatar">${post.avatar || post.author.charAt(0)}</span>
+          <span class="author">${post.author}</span>
+          <span class="date">${post.date}</span>
+        </div>
+        <h4>${post.title}</h4>
+        <p>${post.content}</p>
+        <div class="card-footer">
+          <span>${post.location}</span>
+          <span>${post.comments.length} comments</span>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
 }

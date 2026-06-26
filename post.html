@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InnSight — Community Travel Experience</title>
+<link rel="icon" href="assets/logo-short.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .post-detail-layout {
+    max-width: 800px;
+    margin: 40px auto 80px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    box-shadow: var(--shadow-md);
+  }
+  .post-image {
+    width: 100%;
+    height: 380px;
+    object-fit: cover;
+    border-radius: var(--radius);
+    margin-bottom: 28px;
+    border: 1px solid var(--line);
+  }
+  .post-title {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    color: var(--navy);
+    line-height: 1.2;
+    margin: 0 0 16px;
+  }
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 18px;
+    margin-bottom: 24px;
+  }
+  .post-meta .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--sky);
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .post-meta .info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+  }
+  .post-meta .author {
+    font-size: 14.5px;
+    font-weight: 700;
+  }
+  .post-meta .date {
+    font-size: 12px;
+    color: rgba(27,18,8,0.5);
+  }
+  .post-meta .location-tag {
+    margin-left: auto;
+    background: var(--bg-soft);
+    color: var(--navy);
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+  }
+  .post-body {
+    font-size: 16.5px;
+    line-height: 1.7;
+    color: rgba(27,18,8,0.85);
+    margin-bottom: 40px;
+  }
+  .comments-section {
+    border-top: 1px solid var(--line);
+    padding-top: 34px;
+  }
+  .comments-title {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    color: var(--navy);
+    margin-bottom: 24px;
+  }
+  .comment-item {
+    background: var(--bg-soft);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(27,18,8,0.04);
+  }
+  .comment-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .comment-meta .c-avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .comment-meta .c-author {
+    font-size: 12.5px;
+    font-weight: 700;
+  }
+  .comment-meta .c-date {
+    font-size: 11px;
+    color: rgba(27,18,8,0.4);
+    margin-left: auto;
+  }
+  .comment-text {
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: rgba(27,18,8,0.8);
+    margin: 0;
+  }
+  .comment-form {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 24px;
+    margin-top: 30px;
+    box-shadow: var(--shadow-sm);
+  }
+</style>
+</head>
+<body style="background:var(--bg);">
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <img src="assets/logo-short.png" alt="InnSight Logo" style="height: 48px; width: auto; max-width:220px; object-fit:contain; display:block;">
+    </a>
+
+    <div class="nav-actions" style="margin-left:auto;">
+      <a href="index.html" class="btn btn-navy btn-sm" onclick="localStorage.setItem('redirectTab', 'social');">
+        ← Back to Travel Feed
+      </a>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <div class="post-detail-layout" id="post-content-container">
+    <!-- Loaded dynamically -->
+  </div>
+</main>
+
+<script>
+  // Initial Mock Posts Database (identical to script.js defaults)
+  const DEFAULT_POSTS = [
+    {
+      id: "post-1",
+      title: "Unbelievable remote work stay in Lisbon!",
+      author: "Alex Rivera",
+      avatar: "A",
+      location: "Lisbon, Portugal",
+      content: "Just finished a 2-week workation at the Downtown Designer Loft. The 185 Mbps Wi-Fi was flawless. I sat out on the terrace every afternoon. Highly recommend the Madalena Cafe just down the street! Walking accessibility in Lisbon is amazing, though the street tram is slightly noisy if you open the front balcony.",
+      image: "https://images.unsplash.com/photo-1505873242700-f289a29e1e0f?auto=format&fit=crop&w=700&q=80",
+      likes: 24,
+      comments: [
+        {
+          author: "Clara Dupont",
+          avatar: "C",
+          content: "So glad you enjoyed the terrace! We just had the double-glazed windows serviced to keep the tram noise even lower.",
+          date: "2026-06-25"
+        },
+        {
+          author: "Marc Wood",
+          avatar: "M",
+          content: "Adding this to my wishlist for next spring. Is the desk comfortable for 8+ hours?",
+          date: "2026-06-26"
+        }
+      ],
+      date: "2026-06-24"
+    },
+    {
+      id: "post-2",
+      title: "A serene alpine escape in Interlaken",
+      author: "Sophia Martinez",
+      avatar: "S",
+      location: "Interlaken, Switzerland",
+      content: "Waking up to the Swiss Alps view was majestic. It is incredibly quiet here—literally only bird sounds. The walk to the Harder Kulm funicular is beautiful and highly recommended for hikers.",
+      image: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=700&q=80",
+      likes: 18,
+      comments: [
+        {
+          author: "Hans Keller",
+          avatar: "H",
+          content: "Glad you liked the quiet! The hiking path next to the door is my personal favorite.",
+          date: "2026-06-25"
+        }
+      ],
+      date: "2026-06-23"
+    }
+  ];
+
+  // Retrieve post details
+  function getPostFromStore(postId) {
+    let posts = JSON.parse(localStorage.getItem('innsight_posts'));
+    if (!posts) {
+      localStorage.setItem('innsight_posts', JSON.stringify(DEFAULT_POSTS));
+      posts = DEFAULT_POSTS;
+    }
+    return posts.find(p => p.id === postId);
+  }
+
+  // Save updated post
+  function savePostToStore(updatedPost) {
+    let posts = JSON.parse(localStorage.getItem('innsight_posts'));
+    if (!posts) return;
+    const idx = posts.findIndex(p => p.id === updatedPost.id);
+    if (idx !== -1) {
+      posts[idx] = updatedPost;
+      localStorage.setItem('innsight_posts', JSON.stringify(posts));
+    }
+  }
+
+  // Load and Render Post Details
+  function initPostPage() {
+    const params = new URLSearchParams(window.location.search);
+    const postId = params.get('id');
+    
+    if (!postId) {
+      document.getElementById('post-content-container').innerHTML = `<h3>Error: No post ID specified.</h3>`;
+      return;
+    }
+
+    const post = getPostFromStore(postId);
+    if (!post) {
+      document.getElementById('post-content-container').innerHTML = `<h3>Error: Post not found.</h3>`;
+      return;
+    }
+
+    const imageHtml = post.image ? `<img src="${post.image}" alt="${post.title}" class="post-image">` : '';
+    
+    let commentsListHtml = '';
+    if (post.comments.length === 0) {
+      commentsListHtml = `<p style="color:rgba(27,18,8,0.4); font-size:14px; font-style:italic;">No comments yet. Be the first to join the conversation!</p>`;
+    } else {
+      post.comments.forEach(comment => {
+        commentsListHtml += `
+          <div class="comment-item">
+            <div class="comment-meta">
+              <span class="c-avatar">${comment.avatar || comment.author.charAt(0)}</span>
+              <span class="c-author">${comment.author}</span>
+              <span class="c-date">${comment.date}</span>
+            </div>
+            <p class="comment-text">${comment.content}</p>
+          </div>
+        `;
+      });
+    }
+
+    document.getElementById('post-content-container').innerHTML = `
+      ${imageHtml}
+      
+      <h2 class="post-title">${post.title}</h2>
+      
+      <div class="post-meta">
+        <span class="avatar">${post.avatar || post.author.charAt(0)}</span>
+        <div class="info">
+          <span class="author">By ${post.author}</span>
+          <span class="date">Published on ${post.date}</span>
+        </div>
+        <span class="location-tag">${post.location}</span>
+      </div>
+      
+      <div class="post-body">
+        ${post.content.replace(/\n/g, '<br>')}
+      </div>
+      
+      <div class="comments-section">
+        <h3 class="comments-title">Public Discussion (${post.comments.length})</h3>
+        <div id="comments-list-container">
+          ${commentsListHtml}
+        </div>
+        
+        <!-- Comment submission form -->
+        <div class="comment-form">
+          <h4 style="margin:0 0 14px 0; font-family:'Fraunces',serif; color:var(--navy);">Add Public Comment</h4>
+          <form onsubmit="handleCommentSubmit(event, '${post.id}')">
+            <div class="form-field">
+              <label>Your Name</label>
+              <input type="text" id="comment-author" placeholder="e.g., Clara Dupont" required>
+            </div>
+            <div class="form-field">
+              <label>Comment text</label>
+              <textarea id="comment-text" rows="3" placeholder="Join the discussion publicly..." style="padding:12px; border-radius:10px; border:1.5px solid var(--line); font-family:inherit; outline:none; resize:vertical; font-size:14px;" required></textarea>
+            </div>
+            <button class="btn btn-navy" type="submit" style="margin-top:10px;">Post Comment</button>
+          </form>
+        </div>
+      </div>
+    `;
+  }
+
+  // Handle Comment Submission
+  function handleCommentSubmit(event, postId) {
+    event.preventDefault();
+    
+    const author = document.getElementById('comment-author').value.trim();
+    const content = document.getElementById('comment-text').value.trim();
+    
+    if (!author || !content) return;
+
+    const post = getPostFromStore(postId);
+    if (!post) return;
+
+    const newComment = {
+      author: author,
+      avatar: author.charAt(0).toUpperCase(),
+      content: content,
+      date: new Date().toISOString().split('T')[0]
+    };
+
+    post.comments.push(newComment);
+    savePostToStore(post);
+    
+    // Refresh details page
+    initPostPage();
+  }
+
+  // Initialize
+  document.addEventListener("DOMContentLoaded", initPostPage);
+</script>
+</body>
+</html>

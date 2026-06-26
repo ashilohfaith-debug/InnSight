@@ -18,17 +18,17 @@
 <header class="nav">
   <div class="nav-inner">
     <a href="#top" class="brand" onclick="switchView('landing')">
-      <img src="assets/logo-short.png" alt="InnSight logo">
-      <span class="word"><span class="inn">Inn</span><span class="sight">Sight</span></span>
+      <img src="assets/logo-short.png" alt="InnSight logo" class="brand-logo-img">
     </a>
 
     <!-- Navigation Tabs for Portal Switching -->
     <div class="nav-tabs">
-      <button class="btn tab-btn active" id="tab-landing" onclick="switchView('landing')">🏠 Portal</button>
-      <button class="btn tab-btn" id="tab-guest" onclick="switchView('guest')">🗺️ Guest Map</button>
-      <button class="btn tab-btn" id="tab-host" onclick="switchView('host')">🛠️ Host Hub</button>
-      <button class="btn tab-btn" id="tab-admin" onclick="switchView('admin')">📊 Admin Miner</button>
-      <button class="btn tab-btn" id="tab-arch" onclick="switchView('arch')">⚙️ System Arch</button>
+      <button class="btn tab-btn active" id="tab-landing" onclick="switchView('landing')">Portal</button>
+      <button class="btn tab-btn" id="tab-guest" onclick="switchView('guest')">Guest Map</button>
+      <button class="btn tab-btn" id="tab-social" onclick="switchView('social')">Travel Feed</button>
+      <button class="btn tab-btn" id="tab-host" onclick="switchView('host')">Host Hub</button>
+      <button class="btn tab-btn" id="tab-admin" onclick="switchView('admin')">Admin Miner</button>
+      <button class="btn tab-btn" id="tab-arch" onclick="switchView('arch')">System Arch</button>
     </div>
 
     <div class="nav-actions">
@@ -198,6 +198,24 @@
       </div>
     </section>
 
+    <!-- ============ COMMUNITY TRAVEL EXPERIENCES ============ -->
+    <section class="section" style="background:#fff; border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+      <div class="container">
+        <div class="section-head reveal in" style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px; margin-bottom: 34px;">
+          <div>
+            <span class="eyebrow">Guest Stories</span>
+            <h2>Traveler Experiences</h2>
+            <p>See what remote workers and travelers are saying about their stays, verified Wi-Fi speeds, and local noise levels.</p>
+          </div>
+          <button class="btn btn-outline-accent" onclick="switchView('social')">View All Feed Posts</button>
+        </div>
+
+        <div class="grid-3" id="landing-posts-grid">
+          <!-- Dynamic 3 recent posts rendered here, linking directly to post.html -->
+        </div>
+      </div>
+    </section>
+
     <!-- ============ WHY INNSIGHT ============ -->
     <section class="section">
       <div class="container">
@@ -251,7 +269,7 @@
 
         <div class="feature-block">
           <div class="feature-copy reveal in">
-            <div class="scenario-bubble">💬 Guest request: <span class="quote">"Late Checkout (2 Hours)"</span></div>
+            <div class="scenario-bubble">Guest request: <span class="quote">"Late Checkout (2 Hours)"</span></div>
             <p>InnSight's AI Decision Engine evaluates the request instantly against your upcoming bookings, cleaning windows, and lock schedules — then acts, instead of waiting on a host to reply.</p>
             <p>The result: guests get fast answers, hosts get fewer pings, and turnovers stay on schedule.</p>
             <button class="btn btn-outline-accent btn-sm" onclick="switchView('guest')">See how the engine decides →</button>
@@ -259,27 +277,37 @@
 
           <div class="flow reveal in">
             <div class="flow-step">
-              <div class="ic">🙋</div>
+              <div class="ic">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
               <div class="txt"><b>Guest Request</b><span>"Late checkout — 2 hours"</span></div>
             </div>
             <div class="flow-arrow"></div>
             <div class="flow-step">
-              <div class="ic">🧠</div>
+              <div class="ic">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 6v6l4 2"/></svg>
+              </div>
               <div class="txt"><b>AI Decision Engine</b><span>Checks next booking + cleaning slot</span></div>
             </div>
             <div class="flow-arrow"></div>
             <div class="flow-step">
-              <div class="ic">🔐</div>
+              <div class="ic">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              </div>
               <div class="txt"><b>Lock System Update</b><span>Smart-lock access window extended</span></div>
             </div>
             <div class="flow-arrow"></div>
             <div class="flow-step">
-              <div class="ic">🧹</div>
+              <div class="ic">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+              </div>
               <div class="txt"><b>Cleaning Team Notified</b><span>Turnover schedule auto-adjusted</span></div>
             </div>
             <div class="flow-arrow"></div>
             <div class="flow-step">
-              <div class="ic">✅</div>
+              <div class="ic">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
               <div class="txt"><b>Successful Turnover</b><span>No host intervention needed</span></div>
             </div>
           </div>
@@ -473,13 +501,13 @@
             <p style="font-size:12.5px; color:rgba(27,18,8,0.55); margin-bottom:16px;">Trigger simulated background checks directly using real coordinate and image similarity scenarios.</p>
             <div style="display:flex; flex-direction:column; gap:8px;">
               <button class="btn btn-ghost btn-sm" style="justify-content:flex-start; text-align:left; font-size:12px;" onclick="simulateHostUpload('workspace')">
-                🖥️ workspace_desk_lisbon.jpg (Valid, Workspace Match)
+                workspace_desk_lisbon.jpg — Valid GPS, Workspace Match
               </button>
               <button class="btn btn-ghost btn-sm" style="justify-content:flex-start; text-align:left; font-size:12px;" onclick="simulateHostUpload('bedroom')">
-                🛏️ cozy_bedroom_no_desk.jpg (Valid GPS, Workspace Mismatch)
+                cozy_bedroom_no_desk.jpg — Valid GPS, Workspace Mismatch
               </button>
               <button class="btn btn-ghost btn-sm" style="justify-content:flex-start; text-align:left; font-size:12px;" onclick="simulateHostUpload('stock')">
-                🏖️ hawaii_beach_stock.jpg (Invalid GPS, Stock Image Mismatch)
+                hawaii_beach_stock.jpg — Invalid GPS, Stock Image Mismatch
               </button>
             </div>
           </div>
@@ -634,6 +662,39 @@ $$ LANGUAGE plpgsql;
     </div>
   </div>
 
+  <!-- ============ VIEW 6: TRAVEL FEED (SOCIAL) ============ -->
+  <div id="view-social" class="app-view">
+    <div class="container" style="padding-top:40px; padding-bottom:80px;">
+      <div class="section-head reveal in" style="margin-bottom: 20px; display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px;">
+        <div>
+          <span class="eyebrow">Guest Community</span>
+          <h2>Traveler Experiences &amp; Insights</h2>
+          <p>Read transparent reviews and travel logs shared by our community of remote workers and guests.</p>
+        </div>
+        <button class="btn btn-accent" onclick="openCreatePostModal()">+ Share Your Experience</button>
+      </div>
+
+      <!-- Search & Filter Feed -->
+      <div style="background:#fff; border:1px solid var(--line); border-radius:18px; padding:18px 24px; display:flex; gap:16px; align-items:center; margin-bottom:34px; box-shadow:var(--shadow-sm); flex-wrap:wrap;">
+        <div style="flex:1; min-width:240px; display:flex; align-items:center; gap:10px; background:var(--bg-soft); padding:8px 16px; border-radius:999px; border:1px solid var(--line);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0; color:rgba(27,18,8,0.45);"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="social-search-input" placeholder="Search experiences by location, keywords..." style="background:none; border:none; outline:none; width:100%; font-size:14px; font-family:inherit; color:var(--ink);" oninput="filterSocialFeed()">
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-ghost btn-sm active-filter" id="filter-all" onclick="filterSocialTag('all')" style="border-radius:999px;">All Stays</button>
+          <button class="btn btn-ghost btn-sm" id="filter-lisbon" onclick="filterSocialTag('Lisbon')" style="border-radius:999px;">Lisbon</button>
+          <button class="btn btn-ghost btn-sm" id="filter-bali" onclick="filterSocialTag('Bali')" style="border-radius:999px;">Bali</button>
+          <button class="btn btn-ghost btn-sm" id="filter-switzerland" onclick="filterSocialTag('Switzerland')" style="border-radius:999px;">Switzerland</button>
+        </div>
+      </div>
+
+      <!-- Feed Grid -->
+      <div class="grid-3" id="social-feed-grid">
+        <!-- Dynamic posts cards loaded here -->
+      </div>
+    </div>
+  </div>
+
 </main>
 
 <!-- ============ FOOTER ============ -->
@@ -681,9 +742,15 @@ $$ LANGUAGE plpgsql;
     <div class="footer-bottom">
       <div class="footer-tagline">© 2026 InnSight. Accommodation Made Better With AI.</div>
       <div class="socials">
-        <a href="#" aria-label="Instagram">📷</a>
-        <a href="#" aria-label="Twitter">🐦</a>
-        <a href="#" aria-label="LinkedIn">in</a>
+        <a href="#" aria-label="Instagram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="#" aria-label="Twitter">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+        </a>
+        <a href="#" aria-label="LinkedIn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
       </div>
     </div>
   </div>
@@ -716,14 +783,62 @@ $$ LANGUAGE plpgsql;
   </div>
 </div>
 
+<!-- ============ CREATE POST MODAL ============ -->
+<div id="createPostModal" class="modal-overlay">
+  <div class="modal-card" style="max-width:540px;">
+    <div class="modal-head">
+      <h3>Share Your Experience</h3>
+      <span class="close-modal" onclick="closeCreatePostModal()">&times;</span>
+    </div>
+    <p style="font-size:13px; color:rgba(27,18,8,0.6); margin-bottom:20px;">
+      Publish your travel stay logs, Wi-Fi speed reports, and neighborhood details to help other remote travelers find the perfect spot.
+    </p>
+    <form id="create-post-form" onsubmit="handleCreatePost(event)">
+      <div class="form-field">
+        <label>Post Title</label>
+        <input type="text" id="post-title-input" placeholder="e.g., Flawless remote work week in Ubud!" required>
+      </div>
+      <div class="form-field">
+        <label>Select Property Stay</label>
+        <select id="post-property-select" style="padding:12px; border-radius:10px; border:1.5px solid var(--line); font-family:inherit; outline:none;" onchange="handlePostPropertySelectChange()">
+          <option value="lisbon-loft">Downtown Designer Loft (Lisbon)</option>
+          <option value="alpine">Alpine Wood Cabin (Interlaken)</option>
+          <option value="rice-terrace">Rice Terrace Retreat (Ubud)</option>
+          <option value="cliffside">Cliffside Villa Santorini (Santorini)</option>
+          <option value="other">Other Property Stay</option>
+        </select>
+      </div>
+      <div class="form-field" id="post-location-container" style="display:none;">
+        <label>Property Location</label>
+        <input type="text" id="post-location-input" placeholder="e.g., Lisbon, Portugal">
+      </div>
+      <div class="form-field">
+        <label>Your Name</label>
+        <input type="text" id="post-author-input" placeholder="Alex Rivera" required>
+      </div>
+      <div class="form-field">
+        <label>Share Your Experience (Detailed Text)</label>
+        <textarea id="post-content-input" rows="4" placeholder="Mention Wi-Fi speeds, street noise level (decibels), cafes, check-in, or overall vibes..." style="padding:12px; border-radius:10px; border:1.5px solid var(--line); font-family:inherit; outline:none; resize:vertical; font-size:14.5px;" required></textarea>
+      </div>
+      <div class="form-field">
+        <label>Photo URL (Optional)</label>
+        <input type="url" id="post-image-input" placeholder="e.g., https://images.unsplash.com/photo-...">
+      </div>
+      <button class="btn btn-accent" type="submit" style="width:100%; justify-content:center; margin-top:14px;">Publish Experience Post</button>
+    </form>
+  </div>
+</div>
+
 <!-- ============ AI CHATBOT WIDGET ============ -->
 <div class="chat-widget">
-  <button id="chatToggle" style="position:fixed;bottom:26px;right:26px;width:58px;height:58px;border-radius:50%;background:var(--accent);color:#fff;box-shadow:0 12px 26px rgba(224,86,91,.4);font-size:24px;z-index:800;">💬</button>
+  <button id="chatToggle" style="position:fixed;bottom:26px;right:26px;width:58px;height:58px;border-radius:50%;background:var(--accent);color:#fff;box-shadow:0 12px 26px rgba(224,86,91,.4);font-size:24px;z-index:800; display:flex; align-items:center; justify-content:center;">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+  </button>
   <div id="chatWindow" style="position:fixed;bottom:96px;right:26px;width:340px;max-height:0;overflow:hidden;background:#fff;border-radius:18px;box-shadow:var(--shadow-lg);z-index:800;transition:max-height .35s ease, padding .35s ease;">
     <!-- Chat content container -->
     <div style="display:flex; flex-direction:column; height:340px;">
       <div style="background:var(--navy); color:#fff; padding:12px 16px; font-weight:700; font-size:14px; border-radius:12px 12px 0 0; display:flex; justify-content:space-between; align-items:center;">
-        <span>🤖 InnSight AI Concierge</span>
+        <span>InnSight AI Concierge</span>
         <span style="font-size:10px; background:rgba(255,255,255,0.15); padding:2px 6px; border-radius:4px; font-weight:normal;">Gemini Pro</span>
       </div>
       <div id="chatBody" class="chat-body" style="padding:14px; flex:1;">
