@@ -1082,7 +1082,7 @@ const MOCK_SOCIAL_POSTS = [
     author: "Sophia Martinez",
     avatar: "S",
     location: "Interlaken, Switzerland",
-    content: "Waking up to the Swiss Alps view was majestic. It is incredibly quiet here—literally only bird sounds. The walk to the Harder Kulm funicular is beautiful and highly recommended for hikers.",
+    content: "Waking up to the Swiss Alps view was majestic. It is incredibly quiet here — literally only bird sounds. The walk to the Harder Kulm funicular is beautiful and highly recommended for hikers.",
     image: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=700&q=80",
     likes: 18,
     comments: [
@@ -1094,13 +1094,165 @@ const MOCK_SOCIAL_POSTS = [
       }
     ],
     date: "2026-06-23"
+  },
+  {
+    id: "post-3",
+    title: "Santorini cliffside — worth every cent",
+    author: "James Okafor",
+    avatar: "J",
+    location: "Santorini, Greece",
+    content: "Stayed at the Cliffside Villa for 5 nights and it absolutely delivered. The cave pool is surreal at sunset. Wi-Fi clocked at 92 Mbps consistently, solid enough for video calls. The caldera walkway is literally steps from the front door — no scooter needed for the main attractions. Afternoons get a bit busy with tourist foot traffic but evenings are completely peaceful.",
+    image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=700&q=80",
+    likes: 41,
+    comments: [
+      {
+        author: "Priya Nair",
+        avatar: "P",
+        content: "The cave pool photo you posted sold me immediately. Booking this for our anniversary trip.",
+        date: "2026-06-20"
+      },
+      {
+        author: "David Chen",
+        avatar: "D",
+        content: "Did you find the workspace usable for full days? I need to keep working during the trip.",
+        date: "2026-06-21"
+      },
+      {
+        author: "James Okafor",
+        avatar: "J",
+        content: "Completely usable — the terrace desk gets good shade in the morning. Used it from 7am to noon every day.",
+        date: "2026-06-21"
+      }
+    ],
+    date: "2026-06-19"
+  },
+  {
+    id: "post-4",
+    title: "Working remotely from Ubud — honest review",
+    author: "Nina Vasquez",
+    avatar: "N",
+    location: "Ubud, Bali",
+    content: "The Rice Terrace Retreat has the fastest internet I've tested in Bali — 118 Mbps on a dedicated fiber line with a backup battery. The surrounding nature sounds are calming but insects are loud at night, just a heads up. You absolutely need a scooter or driver to get anywhere. The open-air lounge is perfect for morning calls with the right time zone. Would return without hesitation.",
+    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=700&q=80",
+    likes: 33,
+    comments: [
+      {
+        author: "Lena Hoffmann",
+        avatar: "L",
+        content: "The insect noise was my concern too! Did you find earplugs helped or was it actually fine?",
+        date: "2026-06-17"
+      },
+      {
+        author: "Nina Vasquez",
+        avatar: "N",
+        content: "Honestly fine after the first night — you adjust quickly. The white noise fan they provide helps.",
+        date: "2026-06-17"
+      }
+    ],
+    date: "2026-06-16"
+  },
+  {
+    id: "post-5",
+    title: "One week in Lisbon — productivity at an all-time high",
+    author: "Tom Eriksson",
+    avatar: "T",
+    location: "Lisbon, Portugal",
+    content: "I was skeptical about the workspace claim but the Lisbon loft genuinely delivers. Dedicated desk by the window, ergonomic chair, and gigabit fiber. Noise level was measured at around 40–44 dB during the day — well within acceptable range. The Chiado neighborhood has no shortage of good coffee. This is now my go-to base for European workations.",
+    image: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=700&q=80",
+    likes: 29,
+    comments: [
+      {
+        author: "Alex Rivera",
+        avatar: "A",
+        content: "Completely agree — Chiado has the best cafe density in any city I've worked from. Glad you loved it.",
+        date: "2026-06-14"
+      }
+    ],
+    date: "2026-06-13"
+  },
+  {
+    id: "post-6",
+    title: "Swiss Alps in winter — cabin life is something else",
+    author: "Yuki Tanaka",
+    avatar: "Y",
+    location: "Interlaken, Switzerland",
+    content: "The Alpine Wood Cabin in January is a completely different experience from summer. Fireplace crackling every evening, snow on the mountain, and near-total silence outside. Wi-Fi dipped to around 55 Mbps during a snowstorm but recovered within hours. The hot tub under the stars is the highlight. Highly recommend pairing this stay with the Jungfraujoch day trip.",
+    image: "https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=700&q=80",
+    likes: 52,
+    comments: [
+      {
+        author: "Sophia Martinez",
+        avatar: "S",
+        content: "I did summer — now I need to come back for winter after seeing this. The hot tub looks incredible.",
+        date: "2026-06-10"
+      },
+      {
+        author: "Ravi Patel",
+        avatar: "R",
+        content: "How was the road access in snow? Worried about getting stranded.",
+        date: "2026-06-11"
+      },
+      {
+        author: "Yuki Tanaka",
+        avatar: "Y",
+        content: "The main road is well gritted. We had a 4WD rental and never had any issues. Host also gives good advice on timing.",
+        date: "2026-06-11"
+      }
+    ],
+    date: "2026-06-09"
+  },
+  {
+    id: "post-7",
+    title: "Bali as a long-term base — month one down",
+    author: "Carlos Mendes",
+    avatar: "C",
+    location: "Ubud, Bali",
+    content: "Finishing my first month at the Rice Terrace Retreat and it has been everything I hoped. The pool is a genuine stress reliever after long work sessions. Internet held at 110–120 Mbps throughout. A private driver for the month cost less than a week of taxis back home. The only adjustment is the heat — the open-air lounge is best used before 10am or after 5pm.",
+    image: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=700&q=80",
+    likes: 47,
+    comments: [
+      {
+        author: "Nina Vasquez",
+        avatar: "N",
+        content: "Month-long stays here make so much sense. The rate per night drops and you get into a real routine.",
+        date: "2026-06-06"
+      }
+    ],
+    date: "2026-06-05"
+  },
+  {
+    id: "post-8",
+    title: "Honest thoughts on the Santorini villa after a week",
+    author: "Amara Osei",
+    avatar: "A",
+    location: "Santorini, Greece",
+    content: "Beautiful property, no question. The AI verification badge is accurate — every amenity listed was exactly as described. The sunset terrace is genuinely one of the best views I have ever seen. Worth noting: the Oia caldera steps are steep with luggage, so plan arrivals accordingly. Wi-Fi was stable at 88–96 Mbps. For the price, this is exceptional value compared to hotel alternatives in the area.",
+    image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=700&q=80",
+    likes: 38,
+    comments: [
+      {
+        author: "James Okafor",
+        avatar: "J",
+        content: "The luggage point is real — I wish I had packed lighter. Great tip to include.",
+        date: "2026-06-03"
+      },
+      {
+        author: "Mei Lin",
+        avatar: "M",
+        content: "The AI verification matching perfectly is a big deal for me. I've been burned by misleading listings before.",
+        date: "2026-06-03"
+      }
+    ],
+    date: "2026-06-02"
   }
 ];
 
 let activeSocialTag = 'all';
 
 function initSocialFeedStore() {
-  if (!localStorage.getItem('innsight_posts')) {
+  // Reset store if the data is outdated (fewer posts than the current defaults)
+  const stored = JSON.parse(localStorage.getItem('innsight_posts'));
+  if (!stored || stored.length < MOCK_SOCIAL_POSTS.length) {
     localStorage.setItem('innsight_posts', JSON.stringify(MOCK_SOCIAL_POSTS));
   }
   renderSocialFeed();
