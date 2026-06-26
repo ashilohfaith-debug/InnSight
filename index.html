@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InnSight — AI Insights for Better Stays</title>
+<link rel="icon" href="assets/logo-short.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- Leaflet Map CSS/JS CDNs -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand" onclick="switchView('landing')">
+      <img src="assets/logo-short.png" alt="InnSight logo">
+      <span class="word"><span class="inn">Inn</span><span class="sight">Sight</span></span>
+    </a>
+
+    <!-- Navigation Tabs for Portal Switching -->
+    <div class="nav-tabs">
+      <button class="btn tab-btn active" id="tab-landing" onclick="switchView('landing')">🏠 Portal</button>
+      <button class="btn tab-btn" id="tab-guest" onclick="switchView('guest')">🗺️ Guest Map</button>
+      <button class="btn tab-btn" id="tab-host" onclick="switchView('host')">🛠️ Host Hub</button>
+      <button class="btn tab-btn" id="tab-admin" onclick="switchView('admin')">📊 Admin Miner</button>
+      <button class="btn tab-btn" id="tab-arch" onclick="switchView('arch')">⚙️ System Arch</button>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Profile Badge / Auth State -->
+      <div id="nav-auth-container">
+        <button class="btn btn-navy btn-sm" onclick="openAuthModal()">Sign In</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ VIEW 1: LANDING PAGE ============ -->
+  <div id="view-landing" class="app-view active">
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <!-- Creative Background Elements (Inspired by Meuze) -->
+      <div class="hero-grid"></div>
+      <div class="hero-aura"></div>
+      
+      <!-- Interactive SVG Bounding Box Node Overlay -->
+      <svg class="hero-vector-overlay" viewBox="0 0 1440 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="150" y1="120" x2="320" y2="280" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="4 4" />
+        <line x1="320" y1="280" x2="480" y2="180" stroke="rgba(255,255,255,0.06)" stroke-width="0.75" />
+        <line x1="480" y1="180" x2="720" y2="350" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="8 4" />
+        <line x1="720" y1="350" x2="980" y2="200" stroke="rgba(255,255,255,0.06)" stroke-width="0.75" />
+        <line x1="980" y1="200" x2="1280" y2="400" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="4 4" />
+        <line x1="150" y1="420" x2="320" y2="280" stroke="rgba(255,255,255,0.06)" stroke-width="0.75" />
+        <line x1="980" y1="200" x2="1150" y2="120" stroke="rgba(255,255,255,0.06)" stroke-width="0.75" />
+        
+        <!-- Node markers representing properties -->
+        <circle cx="150" cy="120" r="5" fill="#E0565B" opacity="0.7" />
+        <circle cx="320" cy="280" r="7" fill="#669BBC" opacity="0.7" />
+        <circle cx="480" cy="180" r="4" fill="#E0565B" opacity="0.7" />
+        <circle cx="720" cy="350" r="9" fill="#669BBC" opacity="0.8" />
+        <circle cx="980" cy="200" r="6" fill="#E0565B" opacity="0.7" />
+        <circle cx="1280" cy="400" r="8" fill="#669BBC" opacity="0.7" />
+        <circle cx="150" cy="420" r="4" fill="#E0565B" opacity="0.7" />
+        <circle cx="1150" cy="120" r="5" fill="#669BBC" opacity="0.7" />
+
+        <!-- Pulsing scanner circles -->
+        <circle cx="720" cy="350" r="25" fill="none" stroke="#669BBC" stroke-width="1" opacity="0.3">
+          <animate attributeName="r" values="10;80;10" dur="10s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.4;0;0.4" dur="10s" repeatCount="indefinite" />
+        </circle>
+        <circle cx="320" cy="280" r="20" fill="none" stroke="#E0565B" stroke-width="1" opacity="0.2">
+          <animate attributeName="r" values="8;60;8" dur="8s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.3;0;0.3" dur="8s" repeatCount="indefinite" />
+        </circle>
+        <circle cx="1280" cy="400" r="22" fill="none" stroke="#E0565B" stroke-width="1" opacity="0.2">
+          <animate attributeName="r" values="9;65;9" dur="9s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.3;0;0.3" dur="9s" repeatCount="indefinite" />
+        </circle>
+      </svg>
+
+      <div class="container hero-content">
+        <h1 class="tagline">AI Insights for Better Stays.</h1>
+        <p class="sub">Discover homes that match how you actually travel — verified by AI, run by automation, trusted by thousands of hosts and guests.</p>
+        <div class="hero-ctas">
+          <button class="btn btn-accent" onclick="switchView('guest')">Start Exploring</button>
+          <button class="btn btn-ghost" onclick="switchView('host')">List Your Property</button>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><div class="num">12,400+</div><div class="lbl">Verified Stays</div></div>
+          <div class="hero-stat"><div class="num">94%</div><div class="lbl">Avg. AI Match</div></div>
+          <div class="hero-stat"><div class="num">87%</div><div class="lbl">Faster Turnovers</div></div>
+          <div class="hero-stat"><div class="num">60+</div><div class="lbl">Countries</div></div>
+        </div>
+
+        <div class="hero-img-strip reveal in">
+          <img class="tall" src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=900&q=80" alt="Mountain cabin">
+          <img src="https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=700&q=80" alt="Beach resort">
+          <div class="strip-col">
+            <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&q=80" alt="Workspace stay">
+            <img src="https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=600&q=80" alt="Luxury villa">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ EXPLORE DESTINATIONS ============ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head reveal in">
+          <span class="eyebrow">Section 01</span>
+          <h2>Explore Destinations</h2>
+          <p>Hand-picked stays, ranked by an AI Match Score built from your browsing habits, past trips, and traveler reviews.</p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card reveal in" onclick="quickSelectListing('cliffside')">
+            <div class="img-wrap">
+              <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=700&q=80" alt="Santorini">
+              <div class="match-badge"><span class="dot"></span>AI Match 96%</div>
+            </div>
+            <div class="body">
+              <div class="top-row"><h4>Cliffside Villa</h4><span class="rating">★ 4.97</span></div>
+              <div class="loc">Santorini, Greece</div>
+              <div class="price">$284 <span>/ night</span></div>
+            </div>
+          </div>
+
+          <div class="card reveal in" onclick="quickSelectListing('alpine')">
+            <div class="img-wrap">
+              <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=700&q=80" alt="Swiss Alps">
+              <div class="match-badge"><span class="dot"></span>AI Match 94%</div>
+            </div>
+            <div class="body">
+              <div class="top-row"><h4>Alpine Wood Cabin</h4><span class="rating">★ 4.92</span></div>
+              <div class="loc">Interlaken, Switzerland</div>
+              <div class="price">$198 <span>/ night</span></div>
+            </div>
+          </div>
+
+          <div class="card reveal in" onclick="quickSelectListing('rice-terrace')">
+            <div class="img-wrap">
+              <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=700&q=80" alt="Bali villa">
+              <div class="match-badge"><span class="dot"></span>AI Match 91%</div>
+            </div>
+            <div class="body">
+              <div class="top-row"><h4>Rice Terrace Retreat</h4><span class="rating">★ 4.89</span></div>
+              <div class="loc">Ubud, Bali</div>
+              <div class="price">$112 <span>/ night</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FEATURED AI VERIFIED ============ -->
+    <section class="section" style="background:var(--bg-soft);">
+      <div class="container">
+        <div class="section-head reveal in">
+          <span class="eyebrow">Section 02</span>
+          <h2>Featured AI Verified Properties</h2>
+          <p>Every badge below means the listing passed metadata verification and CLIP-based image analysis — no stock photos, no surprises.</p>
+        </div>
+
+        <div class="grid-3">
+          <div class="verified-card reveal in" onclick="quickSelectListing('lisbon-loft')">
+            <div class="img-wrap"><img src="https://images.unsplash.com/photo-1505873242700-f289a29e1e0f?auto=format&fit=crop&w=700&q=80" alt="Loft"></div>
+            <div class="content">
+              <span class="ai-verified-pill">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z" stroke="currentColor" stroke-width="2"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                AI Verified
+              </span>
+              <h4 style="font-family:'Fraunces',serif;font-size:18px;">Downtown Designer Loft</h4>
+              <div class="loc" style="color:rgba(27,18,8,.55);font-size:13px;">Lisbon, Portugal · $156/night</div>
+              <div class="verified-tags"><span>EXIF Matched</span><span>Image Verified</span><span>Workspace Confirmed</span></div>
+            </div>
+          </div>
+
+          <div class="verified-card reveal in">
+            <div class="img-wrap"><img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=700&q=80" alt="House"></div>
+            <div class="content">
+              <span class="ai-verified-pill">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z" stroke="currentColor" stroke-width="2"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                AI Verified
+              </span>
+              <h4 style="font-family:'Fraunces',serif;font-size:18px;">Lakeside Family Home</h4>
+              <div class="loc" style="color:rgba(27,18,8,.55);font-size:13px;">Queenstown, NZ · $221/night</div>
+              <div class="verified-tags"><span>GPS Matched</span><span>Amenities Confirmed</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ WHY INNSIGHT ============ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head reveal in">
+          <span class="eyebrow">Section 03</span>
+          <h2>Why InnSight?</h2>
+          <p>Four problems we set out to fix in short-term rentals — and how AI quietly handles each one.</p>
+        </div>
+
+        <div class="why-grid">
+          <div class="why-card reveal in">
+            <div class="why-icon" style="background:rgba(224,86,91,0.12);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="#E0565B" stroke-width="2" stroke-linecap="round"/><rect x="4" y="4" width="16" height="16" rx="4" stroke="#E0565B" stroke-width="2"/></svg>
+            </div>
+            <h4>No Hidden Pricing</h4>
+            <p>A transparent cost breakdown for every booking — taxes, fees, and cleaning costs shown upfront, not buried at checkout.</p>
+          </div>
+          <div class="why-card reveal in">
+            <div class="why-icon" style="background:rgba(102,155,188,0.16);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 19h16M7 19V9m5 10V5m5 14v-7" stroke="#669BBC" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <h4>Smarter Operations</h4>
+            <p>AI-assisted property management handles scheduling, pricing, and turnovers, so hosts spend less time managing logistics.</p>
+          </div>
+          <div class="why-card reveal in">
+            <div class="why-icon" style="background:rgba(0,48,73,0.10);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z" stroke="#003049" stroke-width="2"/></svg>
+            </div>
+            <h4>Trusted Listings</h4>
+            <p>Every photo and amenity claim is cross-checked through our AI verification system before a listing goes live.</p>
+          </div>
+          <div class="why-card reveal in">
+            <div class="why-icon" style="background:rgba(193,18,31,0.10);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11z" stroke="#C1121F" stroke-width="2"/><path d="M9 12l2 2 4-4" stroke="#C1121F" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <h4>Better Guest Experience</h4>
+            <p>Issues like late checkouts or maintenance requests get resolved automatically — often before a host even sees them.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ AI FEATURE: AUTOMATED TURNOVER ============ -->
+    <section class="section" style="background:var(--bg-soft);">
+      <div class="container">
+        <div class="section-head reveal in">
+          <span class="eyebrow">AI Feature Showcase</span>
+          <h2>Automated Turnover Operations</h2>
+          <p>What happens behind the scenes the moment a guest sends a simple request.</p>
+        </div>
+
+        <div class="feature-block">
+          <div class="feature-copy reveal in">
+            <div class="scenario-bubble">💬 Guest request: <span class="quote">"Late Checkout (2 Hours)"</span></div>
+            <p>InnSight's AI Decision Engine evaluates the request instantly against your upcoming bookings, cleaning windows, and lock schedules — then acts, instead of waiting on a host to reply.</p>
+            <p>The result: guests get fast answers, hosts get fewer pings, and turnovers stay on schedule.</p>
+            <button class="btn btn-outline-accent btn-sm" onclick="switchView('guest')">See how the engine decides →</button>
+          </div>
+
+          <div class="flow reveal in">
+            <div class="flow-step">
+              <div class="ic">🙋</div>
+              <div class="txt"><b>Guest Request</b><span>"Late checkout — 2 hours"</span></div>
+            </div>
+            <div class="flow-arrow"></div>
+            <div class="flow-step">
+              <div class="ic">🧠</div>
+              <div class="txt"><b>AI Decision Engine</b><span>Checks next booking + cleaning slot</span></div>
+            </div>
+            <div class="flow-arrow"></div>
+            <div class="flow-step">
+              <div class="ic">🔐</div>
+              <div class="txt"><b>Lock System Update</b><span>Smart-lock access window extended</span></div>
+            </div>
+            <div class="flow-arrow"></div>
+            <div class="flow-step">
+              <div class="ic">🧹</div>
+              <div class="txt"><b>Cleaning Team Notified</b><span>Turnover schedule auto-adjusted</span></div>
+            </div>
+            <div class="flow-arrow"></div>
+            <div class="flow-step">
+              <div class="ic">✅</div>
+              <div class="txt"><b>Successful Turnover</b><span>No host intervention needed</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ AI FEATURE: VERIFICATION ============ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head reveal in">
+          <span class="eyebrow">AI Feature Showcase</span>
+          <h2>AI Metadata &amp; Image Verification</h2>
+          <p>The moment a host uploads a photo, it's accepted instantly — then quietly verified in the background through two layers.</p>
+        </div>
+
+        <div class="verify-tabs reveal in">
+          <button class="vtab active" data-target="layer1">Layer 1 — EXIF Metadata</button>
+          <button class="vtab" data-target="layer2">Layer 2 — CLIP Vision Model</button>
+        </div>
+
+        <div class="verify-panel active" id="layer1">
+          <div class="upload-mock reveal in">
+            <div class="imgph"><div class="scan-line"></div>Upload Accepted ✓</div>
+            <div class="check-row"><span class="tick">✓</span> GPS Coordinates match property address</div>
+            <div class="check-row"><span class="tick">✓</span> Device information consistent with host's prior uploads</div>
+            <div class="check-row"><span class="tick">✓</span> Timestamp falls within listing's active window</div>
+          </div>
+          <div class="reveal in">
+            <h3 style="font-family:'Fraunces',serif;font-size:24px;margin-bottom:12px;">Preventing stock photos, automatically</h3>
+            <p style="color:rgba(27,18,8,.62);line-height:1.65;font-size:15.5px;">EXIF analysis checks GPS coordinates, device fingerprint, timestamp, and property location match — catching recycled or stock imagery before it ever reaches a guest.</p>
+            <button class="btn btn-navy btn-sm" style="margin-top:14px;" onclick="switchView('host')">Try the Media Audit Hub →</button>
+          </div>
+        </div>
+
+        <div class="verify-panel" id="layer2">
+          <div class="upload-mock reveal in">
+            <div class="imgph"><div class="scan-line"></div>Scanning image contents…</div>
+            <div class="check-row"><span class="tick">✓</span> Bed detected</div>
+            <div class="check-row"><span class="tick">✓</span> Kitchen &amp; amenities detected</div>
+            <div class="check-row" style="border-top:none;color:var(--accent-deep);"><span class="tick" style="background:#FBE3E1;color:#C1121F;">!</span> "Dedicated workspace" claimed — no desk detected</div>
+            <div class="flag-row">⚠ Listing flagged for host review: amenity mismatch found.</div>
+          </div>
+          <div class="reveal in">
+            <h3 style="font-family:'Fraunces',serif;font-size:24px;margin-bottom:12px;">Cross-checking host claims against reality</h3>
+            <p style="color:rgba(27,18,8,.62);line-height:1.65;font-size:15.5px;">A CLIP-based vision model scans uploaded images for beds, workspaces, routers, kitchens, and amenities — then compares what it sees against what the host claims, flagging mismatches for review.</p>
+            <button class="btn btn-navy btn-sm" style="margin-top:14px;" onclick="switchView('host')">Try the Media Audit Hub →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ AI CONCIERGE ============ -->
+    <section class="section">
+      <div class="container">
+        <div class="concierge reveal in">
+          <div>
+            <span class="eyebrow" style="color:var(--sky);">InnSight AI Concierge</span>
+            <h2 style="margin-top:14px;font-size:clamp(26px,3vw,36px);">Your trip, planned in one conversation.</h2>
+            <p style="color:rgba(255,255,255,.65);margin-top:14px;font-size:15.5px;line-height:1.6;">Ask for a stay, a route, or a whole week — InnSight's concierge pulls from real listings, live availability, and your own travel history.</p>
+            <div class="concierge-feats">
+              <div><span class="dotmark"></span> Personalized stay recommendations</div>
+              <div><span class="dotmark"></span> End-to-end travel planning</div>
+              <div><span class="dotmark"></span> Smart booking insights &amp; price timing</div>
+              <div><span class="dotmark"></span> Property suggestions based on past trips</div>
+            </div>
+            <button class="btn btn-accent" style="margin-top:26px;" onclick="toggleChatWindow(true)">Chat with the Concierge</button>
+          </div>
+          <div class="chat-mock">
+            <div class="chat-row"><div class="bubble ai">Hi! Looking for a quiet workspace-friendly stay near Lisbon under $180/night?</div></div>
+            <div class="chat-row user"><div class="bubble user">Yes, ideally walkable to cafés.</div></div>
+            <div class="chat-row"><div class="bubble ai">Found 3 AI-verified matches — Alfama Loft scores 96% on your past preferences. Want details?</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TRUST METRICS ============ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head reveal in">
+          <span class="eyebrow">Trust at a Glance</span>
+          <h2>Numbers that hold up</h2>
+          <p>Pulled from live platform activity across guests, hosts, and verification systems.</p>
+        </div>
+        <div class="metrics-grid">
+          <div class="metric reveal in"><div class="big" data-value="98" data-suffix="%">0%</div><div class="lbl">Listing Accuracy</div></div>
+          <div class="metric reveal in"><div class="big" data-value="92" data-suffix="%">0%</div><div class="lbl">Guest Satisfaction</div></div>
+          <div class="metric reveal in"><div class="big" data-value="87" data-suffix="%">0%</div><div class="lbl">Faster Turnovers</div></div>
+          <div class="metric reveal in"><div class="big" data-value="94" data-suffix="%">0%</div><div class="lbl">AI Verification Success</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ AUTH SECTION ============ -->
+    <section class="section" style="padding-top:0;">
+      <div class="container">
+        <div class="auth-section reveal in">
+          <div class="auth-col">
+            <h3>For Guests</h3>
+            <p>Find and book your next AI-matched stay.</p>
+            <div class="auth-card" onclick="openAuthModal('guest')">
+              <div class="l"><b>Sign In</b><span>Welcome back — pick up where you left off</span></div>
+              <button class="btn btn-outline-accent btn-sm">Sign In</button>
+            </div>
+            <div class="auth-card" onclick="openAuthModal('guest')">
+              <div class="l"><b>Sign Up</b><span>Create a free guest account</span></div>
+              <button class="btn btn-accent btn-sm">Sign Up</button>
+            </div>
+          </div>
+          <div class="auth-col">
+            <h3>For Hosts</h3>
+            <p>Manage listings with AI-powered operations.</p>
+            <div class="auth-card" onclick="openAuthModal('host')">
+              <div class="l"><b>Host Sign In</b><span>Access your dashboard &amp; analytics</span></div>
+              <button class="btn btn-outline-accent btn-sm">Host Sign In</button>
+            </div>
+            <div class="auth-card" onclick="openAuthModal('host')">
+              <div class="l"><b>Host Sign Up</b><span>List your first property in minutes</span></div>
+              <button class="btn btn-navy btn-sm">Host Sign Up</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+
+  <!-- ============ VIEW 2: GUEST PORTAL ============ -->
+  <div id="view-guest" class="app-view">
+    <div class="container" style="padding-top:40px; padding-bottom:80px;">
+      <div class="section-head reveal in" style="margin-bottom: 20px;">
+        <span class="eyebrow">Guest Portal</span>
+        <h2>Upfront Pricing &amp; Spatial Search Engine</h2>
+        <p>Pins on the map represent legally binding final costs, calculated dynamically including all local taxes and cleaning fees. Test late checkouts with live bitwise conflict checks.</p>
+      </div>
+      
+      <div class="portal-layout">
+        <!-- Interactive Map Block -->
+        <div class="map-outer">
+          <div class="map-overlay-info">
+            <h5>PostGIS Bounding Box Query</h5>
+            <div id="spatial-stats" style="font-size:11.5px; color:rgba(27,18,8,0.7);">
+              Move map to trigger spatial index search. Computed results display legally binding total upfront pricing.
+            </div>
+          </div>
+          <div id="map" class="map-container"></div>
+        </div>
+        
+        <!-- Detail and Booking Drawer -->
+        <div class="detail-drawer" id="guest-detail-drawer">
+          <div class="drawer-empty">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 01.553-.894L9 2l6 3 5.447-2.724A1 1 0 0121 3.172v10.764a1 1 0 01-.553.894L15 18l-6 2z"/>
+              <path d="M9 2v18M15 5v13M12 9a2 2 0 100-4 2 2 0 000 4z"/>
+            </svg>
+            <h4>No Stay Selected</h4>
+            <p>Click on any interactive map pin (e.g., in Lisbon, Greece, Bali, or Switzerland) to load its absolute pricing sheets and late checkout grids.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ============ VIEW 3: HOST HUB ============ -->
+  <div id="view-host" class="app-view">
+    <div class="container" style="padding-top:40px; padding-bottom:80px;">
+      <div class="section-head reveal in" style="margin-bottom: 20px;">
+        <span class="eyebrow">Host Hub</span>
+        <h2>Asynchronous AI Truth-Auditing</h2>
+        <p>Simulate uploading property photo assets. Instantly returns HTTP 202 Accepted. The background worker evaluates EXIF coordinates and runs zero-shot CLIP tags to catch stock images or missing amenities.</p>
+      </div>
+
+      <div class="host-layout">
+        <!-- Left: Upload Trigger Panel -->
+        <div style="display:flex; flex-direction:column; gap:20px;">
+          <div class="upload-zone" id="media-upload-zone" onclick="document.getElementById('mock-file-input').click()">
+            <input type="file" id="mock-file-input" style="display:none;" onchange="handleMockFileSelect(event)">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <h4>Upload Property Media</h4>
+              <p style="font-size:12.5px; color:rgba(27,18,8,0.5); margin-top:4px;">Drag &amp; drop photos or browse to trigger background auditing</p>
+            </div>
+          </div>
+          
+          <div style="background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow-sm);">
+            <h4 style="font-family:'Fraunces',serif; margin-bottom:8px;">Choose Pre-configured Audits</h4>
+            <p style="font-size:12.5px; color:rgba(27,18,8,0.55); margin-bottom:16px;">Trigger simulated background checks directly using real coordinate and image similarity scenarios.</p>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <button class="btn btn-ghost btn-sm" style="justify-content:flex-start; text-align:left; font-size:12px;" onclick="simulateHostUpload('workspace')">
+                🖥️ workspace_desk_lisbon.jpg (Valid, Workspace Match)
+              </button>
+              <button class="btn btn-ghost btn-sm" style="justify-content:flex-start; text-align:left; font-size:12px;" onclick="simulateHostUpload('bedroom')">
+                🛏️ cozy_bedroom_no_desk.jpg (Valid GPS, Workspace Mismatch)
+              </button>
+              <button class="btn btn-ghost btn-sm" style="justify-content:flex-start; text-align:left; font-size:12px;" onclick="simulateHostUpload('stock')">
+                🏖️ hawaii_beach_stock.jpg (Invalid GPS, Stock Image Mismatch)
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Right: Background Worker Logs & Results -->
+        <div class="audit-panel" id="host-audit-panel">
+          <div class="drawer-empty" id="host-audit-empty">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+            <h4>Audit Worker Console Idle</h4>
+            <p>Upload a listing photo or trigger one of the pre-configured audits on the left to watch the Celery queue extract metadata and run CLIP classification.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ============ VIEW 4: ADMIN CONSOLE ============ -->
+  <div id="view-admin" class="app-view">
+    <div class="container" style="padding-top:40px; padding-bottom:80px;">
+      <div class="section-head reveal in" style="margin-bottom: 20px;">
+        <span class="eyebrow">Admin Panel</span>
+        <h2>Asynchronous Review Mining &amp; Gemini AI Synthesis</h2>
+        <p>Scrape unstructured Google Maps reviews using SerpApi, run Google Gemini translation filters to extract objective truths, and save the metadata to the database listing.</p>
+      </div>
+
+      <div class="admin-layout">
+        <!-- Left: Listing Selection -->
+        <div>
+          <table class="admin-listings-table">
+            <thead>
+              <tr>
+                <th>Listing</th>
+                <th>Location</th>
+                <th>AI Status</th>
+                <th>Reviews Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-listings-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Right: SerpApi & Gemini Output Panel -->
+        <div class="audit-panel" id="admin-synthesis-panel" style="min-height:550px;">
+          <div class="drawer-empty" id="admin-synthesis-empty">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+            <h4>LLM Synthesis Engine Idle</h4>
+            <p>Click "Scrape &amp; Synthesize" on any listing on the left to invoke the SerpApi Google reviews collector and process the text arrays using Google Gemini.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ============ VIEW 5: SYSTEM ARCHITECTURE ============ -->
+  <div id="view-arch" class="app-view">
+    <div class="container" style="padding-top:40px; padding-bottom:80px;">
+      <div class="section-head reveal in" style="margin-bottom: 20px;">
+        <span class="eyebrow">Developer View</span>
+        <h2>System Architecture &amp; Database Schemas</h2>
+        <p>Detailed technical specifications of database indexing structures, bitwise scheduling grids, and asynchronous worker sequence diagrams.</p>
+      </div>
+      
+      <div class="arch-card">
+        <h3 style="font-family:'Fraunces',serif; margin-bottom:14px;">Database Schema: listings</h3>
+        <p style="font-size:14px; color:rgba(27,18,8,0.7); margin-bottom:18px;">
+          A listings row uses PostGIS coordinates spatial geometry formatting for bounding index searches, and daily calendars are stored as bitmap bitmask vectors to prevent fractional checkout collision.
+        </p>
+        <div class="arch-grid">
+          <div class="db-schema-box">
+            <div class="schema-title">PostgreSQL + PostGIS listings schema</div>
+<pre style="margin:0; color:#37474f; overflow-x:auto;">
+CREATE TABLE listings (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR(255) NOT NULL,
+  address VARCHAR(512) NOT NULL,
+  -- PostGIS geometry type: 2D Point, WGS84 spatial reference
+  location GEOMETRY(Point, 4326) NOT NULL,
+  base_rate NUMERIC(10, 2) NOT NULL,
+  cleaning_fee NUMERIC(10, 2) NOT NULL,
+  tax_rates JSONB NOT NULL, -- Regional tax coefficients array
+  -- 24h Availability Bitmap Array Segment (24 bits)
+  availability_grid BIT(24) DEFAULT X'FF0F00',
+  unverified_amenities VARCHAR(255)[],
+  ground_truth_summary JSONB DEFAULT '{}'
+);
+
+-- R-Tree Indexing for high-speed spatial point queries
+CREATE INDEX listings_location_gix ON listings USING GIST (location);
+</pre>
+          </div>
+          <div class="db-schema-box">
+            <div class="schema-title">Fractional Late Checkout bitwise AND check</div>
+<pre style="margin:0; color:#37474f; overflow-x:auto;">
+-- Input: Requested late checkout extension hours 11:00 to 13:00 (2h)
+-- Requested mask:   000000000001100000000000 (0x018000)
+-- Cleaner/next reservation block mask: 
+--                   000000000000011000000000 (0x006000)
+
+CREATE OR REPLACE FUNCTION verify_extension(
+  listing_id UUID, 
+  requested_mask BIT(24)
+) RETURNS BOOLEAN AS $$
+DECLARE
+  blocked_slots BIT(24);
+BEGIN
+  SELECT (availability_grid # X'FFFFFFFF') INTO blocked_slots 
+  FROM listings WHERE id = listing_id;
+  
+  -- Bitwise AND: checks if requested slots overlap with blocked blocks
+  IF (requested_mask & blocked_slots) = X'000000' THEN
+    RETURN TRUE; -- Free to extend
+  ELSE
+    RETURN FALSE; -- Conflict exists
+  END IF;
+END;
+$$ LANGUAGE plpgsql;
+</pre>
+          </div>
+        </div>
+      </div>
+      
+      <div class="arch-card">
+        <h3 style="font-family:'Fraunces',serif; margin-bottom:14px;">Asynchronous AI Audit Pipelines</h3>
+        <p style="font-size:14px; color:rgba(27,18,8,0.7); margin-bottom:18px;">
+          When property assets are uploaded, the client receives `HTTP 202 Accepted` to prevent UI thread blocking. Media files are stored in AWS S3, and tracking tasks are queued in Redis for Celery worker processing.
+        </p>
+        <div class="db-schema-box" style="background:#fff;">
+          <div class="schema-title">Zero-Shot Computer Vision Tagging (CLIP Model) &amp; EXIF GPS Audit</div>
+          <p style="font-size:13.5px; line-height:1.6; color:rgba(27,18,8,0.85); margin:0 0 14px 0;">
+            The zero-shot computer vision worker utilizes a Hugging Face CLIP model to calculate the mathematical Cosine Similarity between the uploaded image vector \(\vec{v}\) and the target amenity text description vector \(\vec{u}\):
+          </p>
+          <div style="font-size:18px; text-align:center; padding:18px 0; background:var(--bg-soft); border-radius:10px; font-family:monospace; margin-bottom:14px;">
+            \[\text{Similarity} = \frac{\vec{v} \cdot \vec{u}}{\|\vec{v}\| \|\vec{u}\|}\]
+          </div>
+          <p style="font-size:13px; line-height:1.5; color:rgba(27,18,8,0.7); margin:0;">
+            <strong>Verification Rules:</strong><br>
+            1. If similarity \(&lt; 0.85\) for any amenity claimed by the host (e.g. "dedicated workspace"), the listing is automatically flagged with `unverified_amenities = ['Dedicated Workspace']`. <br>
+            2. The EXIF parser extracts embedded coordinate points and cross-references them with the database PostGIS address coordinate geometry point: if distance \(&gt; 100\text{ meters}\), listing verification fails.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="word"><span class="inn" style="color:#fff;">Inn</span><span class="sight">Sight</span></span>
+        <p>Accommodation Made Better With AI.</p>
+        <form class="newsletter" onsubmit="event.preventDefault(); alert('Subscribed!');">
+          <input type="email" placeholder="Your email" required>
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h5>Support</h5>
+          <a href="#">Customer Care</a>
+          <a href="#">Help Center</a>
+          <a href="#">Contact Us</a>
+          <a href="#">Report an Issue</a>
+          <a href="#">Feedback</a>
+        </div>
+        <div class="footer-col">
+          <h5>Trust</h5>
+          <a href="#">AI Transparency</a>
+          <a href="#">Trust &amp; Safety</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Privacy Policy</a>
+        </div>
+        <div class="footer-col">
+          <h5>Hosting</h5>
+          <a href="#">Host Resources</a>
+          <a href="#">Community Guidelines</a>
+        </div>
+        <div class="footer-col">
+          <h5>Discover</h5>
+          <a href="#">Travel Recommendations</a>
+          <a href="#">Future AI Roadmap</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-tagline">© 2026 InnSight. Accommodation Made Better With AI.</div>
+      <div class="socials">
+        <a href="#" aria-label="Instagram">📷</a>
+        <a href="#" aria-label="Twitter">🐦</a>
+        <a href="#" aria-label="LinkedIn">in</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ AUTH MODAL ============ -->
+<div id="authModal" class="modal-overlay">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3>Select User Profile</h3>
+      <span class="close-modal" onclick="closeAuthModal()">&times;</span>
+    </div>
+    <p style="font-size:13px; color:rgba(27,18,8,0.6); margin-bottom:20px;">
+      Log in as one of the following pre-configured profiles to explore their respective dashboards.
+    </p>
+    <div class="form-field">
+      <label>Select Profile Role</label>
+      <select id="auth-role-select">
+        <option value="guest" selected>Guest (Explore Stays &amp; Book)</option>
+        <option value="host">Property Host (AI Media Auditing Hub)</option>
+        <option value="admin">System Administrator (Reviews &amp; LLM Synthesis)</option>
+        <option value="developer">Core Developer (Schemas &amp; Bitwise Math)</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <label>User Name</label>
+      <input type="text" id="auth-username-input" value="Alex Rivera">
+    </div>
+    <button class="btn btn-navy" style="width:100%; justify-content:center; margin-top:10px;" onclick="performAuthRedirect()">Confirm Sign In</button>
+  </div>
+</div>
+
+<!-- ============ AI CHATBOT WIDGET ============ -->
+<div class="chat-widget">
+  <button id="chatToggle" style="position:fixed;bottom:26px;right:26px;width:58px;height:58px;border-radius:50%;background:var(--accent);color:#fff;box-shadow:0 12px 26px rgba(224,86,91,.4);font-size:24px;z-index:800;">💬</button>
+  <div id="chatWindow" style="position:fixed;bottom:96px;right:26px;width:340px;max-height:0;overflow:hidden;background:#fff;border-radius:18px;box-shadow:var(--shadow-lg);z-index:800;transition:max-height .35s ease, padding .35s ease;">
+    <!-- Chat content container -->
+    <div style="display:flex; flex-direction:column; height:340px;">
+      <div style="background:var(--navy); color:#fff; padding:12px 16px; font-weight:700; font-size:14px; border-radius:12px 12px 0 0; display:flex; justify-content:space-between; align-items:center;">
+        <span>🤖 InnSight AI Concierge</span>
+        <span style="font-size:10px; background:rgba(255,255,255,0.15); padding:2px 6px; border-radius:4px; font-weight:normal;">Gemini Pro</span>
+      </div>
+      <div id="chatBody" class="chat-body" style="padding:14px; flex:1;">
+        <div class="chat-row"><div class="bubble ai" style="background:rgba(102,155,188,0.15); color:var(--ink); border:1px solid rgba(102,155,188,0.3);">Hello! I am your local AI Concierge. Ask me about Wi-Fi speeds, street noise (decibels), walking scores, or cafes neighboring our properties!</div></div>
+      </div>
+      <div class="chat-input-area" style="padding:10px 14px; border-top:1px solid var(--line);">
+        <input type="text" id="chatInput" placeholder="Ask about Lisbon wifi, decibels..." onkeydown="if(event.key==='Enter') sendChatMessage()">
+        <button onclick="sendChatMessage()">➔</button>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+#chatWindow.open{max-height:420px;}
+</style>
+
+<!-- Load scripts at the bottom -->
+<script src="assets/script.js"></script>
+</body>
+</html>
